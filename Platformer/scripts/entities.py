@@ -38,11 +38,11 @@ class PhysicsEtity:
         # their current desired movement and their sustained velocity
         frame_movement = (movement[0] + self.velocity[0], movement[1] + self.velocity[1])
 
-        # Pulling the hitbox rectangle for the entity
-        entity_rect = self.rect()
-
         # Updating x position based on the frame movement
         self.pos[0] += frame_movement[0]
+
+        # Pulling the hitbox rectangle for the entity
+        entity_rect = self.rect()
 
         # Loop through the entities surroundings, if the entity
         # collides with a surrounding rectangle we handle the collision
@@ -60,6 +60,9 @@ class PhysicsEtity:
                 
         # Updating y position based on the frame movement
         self.pos[1] += frame_movement[1]
+
+        # Pulling the hitbox rectangle for the entity
+        entity_rect = self.rect()
 
         # Loop through the entities surroundings, if the entity
         # collides with a surrounding rectangle we handle the collision
