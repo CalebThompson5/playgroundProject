@@ -1,14 +1,13 @@
-#  I will try my best to comment this code as profusely as I can
-#  so you will be able to follow along.
-
 import sys
 import pygame
-from scripts.entities import PhysicsEtity 
 
-# Here we are creating a class for the game. This will make things much easier to work with.
+from scripts.utils import load_image, load_images
+from scripts.entities import PhysicsEtity
+from scripts.tilemap import Tilemap
+
 class Game:
     def __init__(self) -> None:
-        # Initializing pygame
+
         pygame.init()
 
         # Here we are setting the panel for the game. The resolution (in pixels) is being passed in as a tuple
@@ -20,7 +19,18 @@ class Game:
 
         self.movement = [False, False]
 
-        self.player = PhysicsEtity(self, 'player', (50, 50), (32, 32))
+        # Images to be loaded in
+        self.assets = {
+            'decor': load_images('tiles/decor'),
+            'grass': load_images('tiles/grass'),
+            'large_decor': load_images('tiles/large_decor'),
+            'stone': load_images('tiles/stone'),
+            'player': load_image('entities/player.png')
+        }
+
+        self.player = PhysicsEtity(self, 'player', (50, 50), (8, 15))
+
+        self.tilemap = Tilemap(self, tile_size = 16)
 
     def run(self):
         # We are going to use one loop for physics, rendering, etc. 
@@ -28,9 +38,14 @@ class Game:
             # Reset frames
             self.screen.fill((14, 219, 248))
 
+            self.tilemap.render(self.screen)
+
             # update location of player in the x direction
-            self.player.update((self.movement[1] - self.movement[0], 0))
+            self.player.update(self.tilemap, (self.movement[1] - self.movement[0], 0))
             self.player.render(self.screen)
+
+            # print(self.tilemap.physics_rects_around(self.player.pos))
+            # print(self.player.pos)
 
             # Loop for input handling. Application will not respond without this loop
             for event in pygame.event.get():
@@ -44,6 +59,8 @@ class Game:
                         self.movement[0] = True
                     if event.key == pygame.K_RIGHT:
                         self.movement[1] = True
+                    if event.key == pygame.K_UP:
+                        self.player.velocity[1] = -3
 
                 # When key is being lifted up, stop moving   
                 if event.type == pygame.KEYUP:
