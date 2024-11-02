@@ -20,7 +20,8 @@ class Game:
         # README: temporarily messing around with moving characters
         self.test_img = pygame.image.load("data\\images\\Main Characters\\Mask Dude\\Idle (32x32).png").convert_alpha()
         self.test_img_pos = pygame.Vector2(self.screen.get_width() / 2, self.screen.get_height() / 2)
-        self.movement = [False, False]
+        self.movement_y = [False, False]
+        self.movement_x = [False, False]
 
         # Testing getting a frame from a sprite sheet
         self.frame_0 = self.get_sprite(self.test_img, 32, 32)
@@ -33,7 +34,8 @@ class Game:
 
             # Setting a means of moving the character, booleans are converted to integers
             # implicitly. So False = 0 and True = 1. We use this to see how much position should be changed by
-            self.test_img_pos[1] += self.movement[1] - self.movement[0]
+            self.test_img_pos[1] += self.movement_y[1] - self.movement_y[0]
+            self.test_img_pos[0] += self.movement_x[1] - self.movement_x[0]
 
             # Adding character to the screen
             self.screen.blit(self.frame_0, self.test_img_pos)
@@ -47,16 +49,30 @@ class Game:
                 # When key is being pressed down, start moving
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
-                        self.movement[0] = True
+                        self.movement_y[0] = True
                     if event.key == pygame.K_DOWN:
-                        self.movement[1] = True
+                        self.movement_y[1] = True
 
                 # When key is being lifted up, stop moving   
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP:
-                        self.movement[0] = False
+                        self.movement_y[0] = False
                     if event.key == pygame.K_DOWN:
-                        self.movement[1] = False
+                        self.movement_y[1] = False
+
+                # When key is being pressed down, start moving   
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RIGHT:
+                        self.movement_x[1] = True
+                    if event.key == pygame.K_LEFT:
+                        self.movement_x[0] = True
+
+                # When key is being lifted up, stop moving   
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_RIGHT:
+                        self.movement_x[1] = False
+                    if event.key == pygame.K_LEFT:
+                        self.movement_x[0] = False
 
             # This line refreshes the screen. Failing to include this line will leave the screen black
             pygame.display.update()
