@@ -28,4 +28,5 @@ class PhysicsEtity:
          """
 
          """
+         # loading the player image and the position
          surf.blit(self.game.assets['player'], self.pos)

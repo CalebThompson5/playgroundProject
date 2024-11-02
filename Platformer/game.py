@@ -28,6 +28,7 @@ class Game:
             # Reset frames
             self.screen.fill((14, 219, 248))
 
+            # update location of player in the x direction
             self.player.update((self.movement[1] - self.movement[0], 0))
             self.player.render(self.screen)
 
