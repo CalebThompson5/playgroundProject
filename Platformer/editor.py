@@ -1,12 +1,12 @@
 import sys
 import pygame
 
-from scripts.clouds import Clouds
-from scripts.utils import load_image, load_images, Animation
-from scripts.entities import PhysicsEntity, Player
+from scripts.utils import load_images, Animation
 from scripts.tilemap import Tilemap
 
-class Game:
+RENDER_SCALE = 2.0
+
+class Editor:
     def __init__(self) -> None:
 
         pygame.init()
@@ -14,7 +14,7 @@ class Game:
         # Here we are setting the panel for the game. The resolution (in pixels) is being passed in as a tuple
         self.screen = pygame.display.set_mode((640, 480))
         self.display = pygame.Surface((320, 240))
-        pygame.display.set_caption("Platformer Game")
+        pygame.display.set_caption("Editor")
 
         # Creating a clock so we can set a frame rate. We are gonna use a fixed frame rate (60fps) so the game doesn't eat CPU
         self.clock = pygame.time.Clock()
