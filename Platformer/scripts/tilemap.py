@@ -1,3 +1,4 @@
+import json
 import pygame
 
 # List of neighboring tiles... Order matters a lot here
@@ -15,11 +16,6 @@ class Tilemap:
         self.tile_size = tile_size
         self.tilemap = {}
         self.offgrid_tiles = []
-
-        # Example tilemap for testing functionality to be replaced later
-        for i in range(10):
-            self.tilemap[str(3 + i) + ';10'] = {'type': 'grass', 'variant': 1, 'pos': (3 + i, 10)}
-            self.tilemap['10;' + str(5 + i)] = {'type': 'stone', 'variant': 1, 'pos': (10, 5 + i)}
 
     def tiles_around(self, pos: tuple) -> list[dict]:
         """ Args:
@@ -39,6 +35,20 @@ class Tilemap:
                 tiles.append(self.tilemap[check_loc])
         return tiles
     
+    def save(self, path):
+        f = open(path, w)
+        json.dump({'tilemap': self.tilemap, 'tile_size': self.tile_size, 'offgrid': self.offgrid_tiles}, f)
+        f.close()
+
+    def load(self, path):
+        f = open(path, 'w')
+        map_data = json.load(f)
+        f.close()
+
+        self.tilemap = map_data['tilemap']
+        self.tile_size = map_data['tile_size']
+        self.offgrid_tiles = map_data['offgrid_tiles']
+    
     def physics_rects_around(self, pos: tuple) -> list[object]:
         """ Args:
         pos: position from which we will scan surrounding tiles
@@ -52,6 +62,13 @@ class Tilemap:
             if tile['type'] in PHYSICS_TILES:
                 rects.append(pygame.Rect(tile['pos'][0] * self.tile_size, tile['pos'][1] * self.tile_size, self.tile_size, self.tile_size))
         return rects
+    
+    def autotile(self):
+        for loc in self.tilemap:
+            tile = self.tilemap[loc]
+            neighbors = set()
+            for shift in [(1, 0), (-1, 0), (0, -1), (0, 1)]:
+                check_loc = str(tile['pos'][0])
 
     def render(self, surf: object, offset: tuple) -> None:
         """ Args:
